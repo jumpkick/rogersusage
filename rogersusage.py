@@ -7,7 +7,7 @@ from optparse import OptionParser, OptionGroup
 from ConfigParser import SafeConfigParser
 from getpass import getpass
 import requests
-
+from datetime import datetime
 
 def login(username, password):
     """Attempts a login and returns cookies."""
@@ -131,8 +131,17 @@ def usage_data(account_number, login_cookies):
                 if usage_json['isInternetUsageUnlimited']:
                     usage['unlimited'] = True
                     usage['cap'] = 0
+                    usage['percentage_used'] = 0
                 else:
                     usage['unlimited'] = False
+                    usage['percentage_used'] = current_usage['totalUsedPercentage']
+
+                # Calculate remaining days until next billing cycle
+                date_format = "%m/%d/%Y"
+                start_date = datetime.now().today().date()
+                end_date = datetime.strptime(usage['end_date'], date_format).date()
+                delta = end_date - start_date
+                usage['remaining_days'] = delta.days
 
                 return usage
             except:
@@ -225,10 +234,10 @@ def main():
         remaining_value = ''
 
     if options.csv:
-        output_string = str(usage['total']) + "," + str(usage['cap'])
+        output_string = str(usage['total']) + "," + str(usage['cap']) + "," + str(usage['percentage_used']) + "," + str(usage['remaining_days'])
 
         if not options.totals_only:
-            output_string = ','.join([str(usage['download']), str(usage['upload']), output_string, str(remaining_value)])
+            output_string = ','.join([str(usage['download']), str(usage['upload']), str(remaining_value), output_string])
 
         print output_string
     else:
@@ -245,7 +254,8 @@ def main():
             print str(abs(remaining_value)), 'GB'
         else:
             print 'Usage Cap: Unlimited'
-
+        print 'Percentage Used:', usage['percentage_used'],'%'
+        print 'Days Remaining:', usage['remaining_days'],'days'
 
 if __name__ == '__main__':
     main()
