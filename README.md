@@ -33,10 +33,14 @@ The script will prompt for a My Rogers login ID (typically an email address) and
     - Rogers login password
 
 ### Sample Output
-    Uploaded: 18.85 GB
-    Total Usage: 125.98 GB
-    Usage Cap: 200.0 GB
-    Remaining Usage: 74.02 GB
+    Downloaded: 57.61 GB
+    Uploaded: 4.64 GB
+    Total Usage: 62.25 GB
+    Usage Cap: 300.0 GB
+    Remaining Usage: 237.75 GB
+    Percentage Used: 21 %
+    Days Remaining: 20 days
+
 
 ## Notes
 This is provided as-is, with no warranty or guarantee of any kind it will work. Hopefully someone else will find it useful. It uses an undocumented and unsupported API from Rogers, any changes could break things in the future.
