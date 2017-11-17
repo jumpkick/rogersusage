@@ -141,7 +141,7 @@ def usage_data(account_number, login_cookies):
                 start_date = datetime.now().today().date()
                 end_date = datetime.strptime(usage['end_date'], date_format).date()
                 delta = end_date - start_date
-                usage['remaining_days'] = delta.days
+                usage['remaining_days'] = delta.days + 1
 
                 return usage
             except:
