@@ -4,7 +4,7 @@
 
 import os
 from optparse import OptionParser, OptionGroup
-from ConfigParser import SafeConfigParser
+from configparser import ConfigParser
 from getpass import getpass
 import requests
 from datetime import datetime
@@ -70,7 +70,7 @@ def account_number(login_cookies):
                 account_info = response.json()
                 return parse_account_number(account_info)
             except:
-                print "Error parsing account number"
+                print ("Error parsing account number")
         else:
             print("Error getting account number")
 
@@ -145,7 +145,7 @@ def usage_data(account_number, login_cookies):
 
                 return usage
             except:
-                print "Error parsing usage data. Rogers may have changed data formats. Please check for an update to rogersusage.py"
+                print ("Error parsing usage data. Rogers may have changed data formats. Please check for an update to rogersusage.py")
         else:
             print("Error getting usage data")
 
@@ -191,7 +191,7 @@ def main():
 
     # get username from config if it hasn't been loaded from command line
     configfile = os.path.expanduser('~/.rogersusage_config')
-    userconfig = SafeConfigParser()
+    userconfig = ConfigParser()
 
     if username is None or username == '':
         userconfig.read(configfile)
@@ -204,7 +204,7 @@ def main():
 
     # get username interactively if it hasn't been loaded yet
     if username is None or username == '':
-        username = raw_input("Login ID: ")
+        username = input("Login ID: ")
         print_username_reminder = False
 
     # get password from the keychain if possible
@@ -219,7 +219,7 @@ def main():
     # if password isn't in the keychain, get it interactively
     if password is None or password == '':
         if  print_username_reminder:
-            print "Login ID:", username
+            print ("Login ID:", username)
 
         password = getpass("Password: ")
         store_password = True
@@ -239,23 +239,23 @@ def main():
         if not options.totals_only:
             output_string = ','.join([str(usage['download']), str(usage['upload']), str(remaining_value), output_string])
 
-        print output_string
+        print (output_string)
     else:
         if not options.totals_only:
-            print 'Downloaded:', usage['download'], 'GB'
-            print 'Uploaded:', usage['upload'], 'GB'
-        print 'Total Usage:', usage['total'], 'GB'
+            print ('Downloaded:', usage['download'], 'GB')
+            print ('Uploaded:', usage['upload'], 'GB')
+        print ('Total Usage:', usage['total'], 'GB')
         if not usage['unlimited']:
-            print 'Usage Cap:', usage['cap'], 'GB'
+            print ('Usage Cap:', usage['cap'], 'GB')
             if remaining_value < 0:
-                print 'Overage:',
+                print ('Overage:',)
             else:
-                print 'Remaining Usage:',
-            print str(abs(remaining_value)), 'GB'
+                print ('Remaining Usage:',)
+            print (str(abs(remaining_value)), 'GB')
         else:
-            print 'Usage Cap: Unlimited'
-        print 'Percentage Used:', usage['percentage_used'],'%'
-        print 'Days Remaining:', usage['remaining_days'],'days'
+            print ('Usage Cap: Unlimited')
+        print ('Percentage Used:', usage['percentage_used'],'%')
+        print ('Days Remaining:', usage['remaining_days'],'days')
 
 if __name__ == '__main__':
     main()
